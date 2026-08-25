@@ -241,7 +241,7 @@
       <p class="sub">ada sedikit yang mau aku sampaikan…</p>
       <div id="giftStage">
         <div id="ringGold"></div>
-        <div id="giftWrap">
+        <div id="giftWrap" onclick="bukaHadiah()">
           <div id="gift"><img id="viewerGiftImg" src="https://htmlku.com/0/panda/hiya.gif" alt="gif"></div>
         </div>
       </div>
@@ -265,7 +265,7 @@
     </section>
 
     <div id="returnToolbar">
-      <button type="button" id="btnKembali">
+      <button type="button" id="btnKembali" onclick="handleKembali()">
         <span style="font-size:18px;">↩</span>
         <span id="btnKembaliText">Kembali ke Dashboard</span>
       </button>
@@ -552,6 +552,12 @@
       document.getElementById('platformNav').style.display = 'none';
       document.querySelectorAll('.platform-view').forEach(v => v.classList.remove('active'));
       document.getElementById('template-viewer-container').classList.add('active');
+      sudahDibuka = false;
+      gift.innerHTML = `<img id="viewerGiftImg" src="${activeContent.sticker}" alt="gif">`;
+      giftHint.style.opacity = "0.75";
+      s1.classList.remove("hidden");
+      s2.classList.add("hidden");
+      toolbar.classList.remove("show");
     }
 
     function bukaHadiah() {
@@ -587,44 +593,54 @@
       document.getElementById("frameThanks").classList.add("show");
 
       typeThanks = new TypeIt("#typedThanks", {
-        strings: [activeContent.msg], speed: 22, cursor: true,
-        afterComplete: function(){
-          setTimeout(() => {
-            document.getElementById("frameClosing").classList.add("show");
-            typeClosing = new TypeIt("#typedClosing", {
-              strings: [activeContent.closing], speed: 22, cursor: true,
-              afterComplete: function(){
-                document.getElementById("signoff").classList.add("show");
-                toolbar.classList.add("show");
-              }
-            });
-            typeClosing.go();
-          }, 400);
+        strings: [activeContent.msg],
+        speed: 45,
+        cursor: true,
+        afterComplete: function(instance) {
+          instance.destroy();
+          document.getElementById("frameClosing").classList.add("show");
+          
+          typeClosing = new TypeIt("#typedClosing", {
+            strings: [activeContent.closing],
+            speed: 45,
+            cursor: true,
+            afterComplete: function(inst2) {
+              inst2.destroy();
+              document.getElementById("signoff").classList.add("show");
+              toolbar.classList.add("show");
+              mulaiEfekBunga();
+            }
+          }).go();
         }
-      });
-      typeThanks.go();
+      }).go();
     }
 
-    function kembaliKeDashboard() {
+    function mulaiEfekBunga() {
+      if (sparkInterval) clearInterval(sparkInterval);
+      sparkInterval = setInterval(() => {
+        let spark = document.createElement("div");
+        spark.className = "spark";
+        spark.innerHTML = "✨";
+        spark.style.left = Math.random() * 95 + "vw";
+        spark.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 4000);
+      }, 350);
+    }
+
+    function handleKembali() {
+      audio.pause();
+      if (sparkInterval) clearInterval(sparkInterval);
+      document.getElementById('template-viewer-container').classList.remove('active');
       const urlParams = new URLSearchParams(window.location.search);
       if(urlParams.get('data')) {
-        window.location.href = window.location.origin + window.location.pathname;
-        return;
+        window.location.href = window.location.pathname;
+      } else if(currentUser) {
+        switchView('dashboard');
+      } else {
+        switchView('landing');
       }
-      audio.pause(); audio.currentTime = 0;
-      document.getElementById('template-viewer-container').classList.remove('active');
-      sudahDibuka = false;
-      switchView('dashboard');
     }
-
-    // Event listeners tombol interaktif aman dari duplikasi
-    let newGiftWrap = giftWrap.cloneNode(true);
-    giftWrap.parentNode.replaceChild(newGiftWrap, giftWrap);
-    newGiftWrap.addEventListener("pointerdown", (e) => { e.preventDefault(); bukaHadiah(); });
-
-    let newBtnKembali = btnKembali.cloneNode(true);
-    btnKembali.parentNode.replaceChild(newBtnKembali, btnKembali);
-    newBtnKembali.addEventListener("pointerdown", (e) => { e.preventDefault(); kembaliKeDashboard(); });
   </script>
 </body>
 </html>
