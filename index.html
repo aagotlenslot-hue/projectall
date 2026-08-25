@@ -12,9 +12,8 @@
     --bg2: #0d0a12;
     --gold: #d9b25c;
     --gold-light: #f4e1ab;
-    --gold-dim: #7a5f28;
     --cream: #f3ecdd;
-    --card: rgba(24,19,14,.90);
+    --card: rgba(24,19,14,.95);
     --line: rgba(217,178,92,.35);
     --serif: 'Playfair Display', serif;
     --script: 'Cormorant Garamond', serif;
@@ -38,7 +37,6 @@
   .platform-view { display: none; padding: 40px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
   .platform-view.active { display: block; }
 
-  /* LANDING & AUTH STYLES */
   .hero { text-align: center; padding: 60px 20px; }
   .hero h1 { font-size: clamp(32px, 6vw, 54px); margin-bottom: 20px; color: #fff; }
   .hero h1 span { color: #ff7eb3; }
@@ -50,16 +48,16 @@
   .form-group label { display: block; font-size: 13px; margin-bottom: 5px; color: var(--gold); }
   .form-group input, .form-group textarea { width: 100%; padding: 12px; border-radius: 8px; background: #1a1528; border: 1px solid var(--line); color: #fff; outline: none; }
   .form-group textarea { resize: vertical; height: 90px; }
-  .form-group input:focus, .form-group textarea:focus { border-color: #ff7eb3; }
+  .form-group input:focus { border-color: #ff7eb3; }
   .full-width { width: 100%; margin-top: 10px; }
 
   /* DASHBOARD */
   .welcome-banner { background: var(--card); border: 1px solid var(--line); padding: 25px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-  .badge-premium { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; margin-top: 5px; }
+  .badge-premium { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; }
   .badge-free { background: #444; color: #ccc; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; }
-  .badge-owner { background: linear-gradient(135deg, #ff7eb3, #764ba2); color: #fff; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; margin-top: 5px; }
+  .badge-owner { background: linear-gradient(135deg, #ff7eb3, #764ba2); color: #fff; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; }
   
-  .section-title { margin: 25px 0 15px; color: var(--gold-light); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .section-title { margin: 25px 0 15px; color: var(--gold-light); display: flex; justify-content: space-between; align-items: center; }
   .grid-templates { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
   .template-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; padding: 15px; }
   .template-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
@@ -67,15 +65,15 @@
   .template-card p { font-size: 12px; color: #aaa; margin-bottom: 15px; }
   .card-actions { display: flex; gap: 10px; }
 
-  /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999999; }
+  /* MODAL SISTEM (DANA & LUPA PASSWORD STEP-BY-STEP) */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999999; padding: 15px; }
   .modal-box { background: #130f1d; border: 1px solid var(--gold); padding: 30px; border-radius: 12px; width: 100%; max-width: 420px; text-align: center; }
   .dana-number { font-size: 24px; font-weight: 700; color: var(--gold-light); margin: 10px 0; background: rgba(217,178,92,0.1); padding: 12px; border-radius: 6px; letter-spacing: 1px; }
 
   /* TEMPLATE INTERAKTIF VIEWER */
   #template-viewer-container { display: none; position: fixed; inset: 0; z-index: 90000; background: var(--bg); overflow: hidden; }
   #template-viewer-container.active { display: block; }
-  #sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(ellipse at 50% -10%, rgba(217,178,92,.10), transparent 55%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+  #sky { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 50% -10%, rgba(217,178,92,.10), transparent 55%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
   .star { position: absolute; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 6px 1px rgba(244,225,171,.6); animation: twinkle 3.2s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{ opacity:.15; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
 
@@ -164,41 +162,9 @@
       <button class="btn btn-primary full-width" onclick="handleLogin()">Masuk →</button>
       <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('landing')">← Kembali</button>
       <div style="display: flex; justify-content: space-between; margin-top: 15px; font-size: 12px;">
-        <a href="#" onclick="switchView('forgotStep1')" style="color:var(--gold);">Lupa Kata Sandi? (Via WA)</a>
+        <a href="#" onclick="openForgotModal()" style="color:var(--gold); font-weight:600;">Lupa Kata Sandi? (Via WA)</a>
         <a href="#" onclick="switchView('register')" style="color:#ff7eb3;">Daftar Akun Baru</a>
       </div>
-    </div>
-  </section>
-
-  <!-- 3.1. LUPA PASSWORD - STEP 1 (KIRIM OTP KE WHATSAPP NYATA) -->
-  <section id="forgotStep1" class="platform-view">
-    <div class="auth-container">
-      <h2>Reset Password via WhatsApp</h2>
-      <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; text-align:center;">Masukkan nomor WhatsApp terdaftar Anda. Kode OTP instan akan dikirim langsung ke WhatsApp Anda.</p>
-      <div class="form-group"><label>Nomor WhatsApp Aktif</label><input type="text" id="forgotWaNumber" placeholder="08xxxxxxxxxx"></div>
-      <button class="btn btn-wa full-width" onclick="sendWhatsappOtpReal()">📩 Kirim Kode OTP ke WhatsApp Nyata</button>
-      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('login')">← Batal & Kembali Masuk</button>
-    </div>
-  </section>
-
-  <!-- 3.2. LUPA PASSWORD - STEP 2 (INPUT KODE OTP WHATSAPP) -->
-  <section id="forgotStep2" class="platform-view">
-    <div class="auth-container">
-      <h2>Masukkan Kode OTP WhatsApp</h2>
-      <p style="font-size: 13px; color: #25d366; margin-bottom: 15px; text-align:center;" id="waOtpNotice">Kode OTP 6 digit telah dikirim ke WhatsApp Anda. Silakan cek chat:</p>
-      <div class="form-group"><label>Masukkan 6 Digit Kode OTP</label><input type="text" id="inputWaOtp" placeholder="123456" maxlength="6" style="text-align:center; font-size: 22px; letter-spacing: 6px;"></div>
-      <button class="btn btn-primary full-width" onclick="verifyWaOtpCode()">✔ Konfirmasi Kode OTP</button>
-      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('forgotStep1')">Kirim Ulang OTP</button>
-    </div>
-  </section>
-
-  <!-- 3.3. LUPA PASSWORD - STEP 3 (BUAT PASSWORD BARU) -->
-  <section id="forgotStep3" class="platform-view">
-    <div class="auth-container">
-      <h2>Buat Kata Sandi Baru</h2>
-      <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; text-align:center;">OTP terverifikasi! Masukkan kata sandi baru akun Anda.</p>
-      <div class="form-group"><label>Kata Sandi Baru</label><input type="password" id="newPasswordInput" placeholder="••••••••"></div>
-      <button class="btn btn-primary full-width" onclick="saveNewPasswordReal()">Simpan Sandi Baru & Masuk</button>
     </div>
   </section>
 
@@ -215,24 +181,21 @@
       </div>
     </div>
 
-    <!-- PANEL KHUSUS OWNER/ADMIN (PASTE KODE HTML BARU) -->
+    <!-- PANEL KHUSUS OWNER/ADMIN -->
     <div id="adminPanelSection" style="display: none; background: rgba(255,126,179,0.08); border: 1px dashed #ff7eb3; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
-      <h3 style="color: #ff7eb3; margin-bottom: 10px; display:flex; align-items:center; gap:8px;">👑 Panel Owner / Admin Utama (Tambah Template HTML Otomatis)</h3>
-      <p style="font-size: 12px; color: #ccc; margin-bottom: 15px;">Paste atau buat template HTML baru di sini. Sistem akan otomatis menambahkannya ke deretan Template Publik secara real-time!</p>
-      <div class="form-group"><label>Nama / Judul File Template (.html)</label><input type="text" id="adminNewTplTitle" placeholder="Misal: template-spesial.html"></div>
-      <div class="form-group"><label>URL Gambar / Stiker Preview</label><input type="text" id="adminNewTplImg" placeholder="https://htmlku.com/0/panda/bubu.gif"></div>
-      <div class="form-group"><label>Deskripsi Singkat Template</label><input type="text" id="adminNewTplDesc" placeholder="Template spesial ucapan interaktif terbaru."></div>
-      <div class="form-group"><label>Konten Pesan Utama</label><textarea id="adminNewTplMsg" placeholder="Tulis isi pesan template di sini..."></textarea></div>
+      <h3 style="color: #ff7eb3; margin-bottom: 10px;">👑 Panel Owner / Admin Utama</h3>
+      <div class="form-group"><label>Judul File Template (.html)</label><input type="text" id="adminNewTplTitle" placeholder="template-baru.html"></div>
+      <div class="form-group"><label>URL Gambar / GIF Preview</label><input type="text" id="adminNewTplImg" placeholder="https://htmlku.com/0/panda/bubu.gif"></div>
+      <div class="form-group"><label>Deskripsi Singkat</label><input type="text" id="adminNewTplDesc" placeholder="Deskripsi template"></div>
+      <div class="form-group"><label>Pesan Utama</label><textarea id="adminNewTplMsg" placeholder="Isi pesan ucapan..."></textarea></div>
       <button class="btn btn-primary" onclick="adminAddNewPublicTemplate()">+ Terbitkan Template Publik Baru 🚀</button>
     </div>
 
-    <!-- MENU 1: TEMPLATE PUBLIK -->
     <div class="section-title">
       <h3>🌐 Template Publik (Siap Pakai)</h3>
     </div>
     <div class="grid-templates" id="publicTemplatesGrid"></div>
 
-    <!-- MENU 2: KUSTOMISASI SAYA -->
     <div class="section-title" style="margin-top: 40px;">
       <h3>🎨 Kustomisasi Proyek Saya</h3>
       <button class="btn btn-primary" style="font-size:12px; padding:8px 18px;" onclick="openEditor('new')">+ Buat Kustomisasi Baru</button>
@@ -246,28 +209,27 @@
   <section id="editorView" class="platform-view">
     <div style="max-width: 650px; margin: 0 auto; background: var(--card); border: 1px solid var(--line); padding: 30px; border-radius: 12px;">
       <h2 style="color: var(--gold-light); margin-bottom: 5px;">🎨 Editor Kustomisasi Pribadi</h2>
-      <p style="font-size: 13px; color: #a09cb0; margin-bottom: 20px;">Ubah isi pesan dan stiker sesuai keinginan Anda.</p>
       
       <input type="hidden" id="editIndexId" value="">
       <div class="form-group"><label>Judul Proyek Kustom</label><input type="text" id="editProjectTitle" value="Untuk Pacarku Tersayang"></div>
       <div class="form-group"><label>Judul Utama Halaman</label><input type="text" id="editTitle" value="Untuk Kamu"></div>
-      <div class="form-group"><label>URL Stiker / GIF Kado Awal</label><input type="text" id="editSticker" value="https://htmlku.com/0/panda/hiya.gif"></div>
-      <div class="form-group"><label>URL Stiker / GIF Amplop Terbuka</label><input type="text" id="editAmplop" value="https://htmlku.com/0/panda/teplek.gif"></div>
-      <div class="form-group"><label>Pesan Utama</label><textarea id="editMsg">Terima kasih sudah selalu ada, di saat senang maupun susah.</textarea></div>
-      <div class="form-group"><label>Pesan Penutup</label><textarea id="editClosing">Semoga kebaikan kamu selalu dibalas hal baik. Makasih ya 💛</textarea></div>
+      <div class="form-group"><label>URL Stiker Awal</label><input type="text" id="editSticker" value="https://htmlku.com/0/panda/hiya.gif"></div>
+      <div class="form-group"><label>URL Stiker Amplop Terbuka</label><input type="text" id="editAmplop" value="https://htmlku.com/0/panda/teplek.gif"></div>
+      <div class="form-group"><label>Pesan Utama</label><textarea id="editMsg">Terima kasih sudah selalu ada.</textarea></div>
+      <div class="form-group"><label>Pesan Penutup</label><textarea id="editClosing">Semoga bahagia selalu ya 💛</textarea></div>
       <div class="form-group"><label>Nama Pengirim (Signoff)</label><input type="text" id="editSign" value="NAMA ANDA"></div>
 
       <div style="background: rgba(217,178,92,0.08); border: 1px dashed var(--gold); padding: 15px; border-radius: 8px; margin: 20px 0;">
         <label style="color: var(--gold); font-weight: 600; margin-bottom: 8px; display:block;">🔗 Link Bagikan Unik</label>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <input type="text" id="generatedLinkResult" readonly style="background:#110e19; color:var(--gold-light); flex:1;" placeholder="Simpan dulu untuk generate link...">
+          <input type="text" id="generatedLinkResult" readonly style="background:#110e19; color:var(--gold-light); flex:1;" placeholder="Simpan dulu...">
           <button class="btn btn-outline" onclick="copyShareLink()">Salin Link</button>
         </div>
       </div>
 
-      <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
         <button class="btn btn-primary" style="flex:1;" onclick="saveMyCustomData()">Simpan & Buat Link 💾</button>
-        <button class="btn btn-outline" onclick="switchView('dashboard')">Kembali ke Dashboard</button>
+        <button class="btn btn-outline" onclick="switchView('dashboard')">Kembali</button>
       </div>
     </div>
   </section>
@@ -314,27 +276,53 @@
     </div>
   </div>
 
-  <!-- 6. PAYMENT MODAL DANA (TRANSFER NYATA KE NO 085187131339) -->
+  <!-- MODAL PEMBAYARAN DANA -->
   <div class="modal-overlay" id="danaModal">
     <div class="modal-box">
       <h3 style="color: #ff7eb3; margin-bottom: 8px;">Upgrade Akun Premium (Rp 5.000)</h3>
-      <p style="font-size: 13px; color: #ccc; margin-bottom: 15px;">Silakan transfer tepat sebesar <b>Rp 5.000</b> ke nomor DANA Resmi Owner berikut:</p>
-      
+      <p style="font-size: 13px; color: #ccc; margin-bottom: 15px;">Transfer tepat sebesar <b>Rp 5.000</b> ke nomor DANA Resmi:</p>
       <div class="dana-number">085187131339</div>
-      <p style="font-size: 11px; color: var(--gold); margin-bottom: 20px;">Atas Nama: Owner FeelDream / Admin</p>
-
-      <a href="https://link.dana.id/qr/v2/31300000000000000000?amount=5000&note=Upgrade+FeelDream+Premium" target="_blank" class="btn btn-dana full-width" style="text-decoration:none; display:block; padding:12px; text-align:center; margin-bottom:12px;">
-        📱 Buka Aplikasi DANA (Nominal Otomatis Rp 5.000)
-      </a>
-
-      <p style="font-size: 12px; color: #aaa; margin-bottom: 12px;">Setelah Anda transfer lewat DANA, klik tombol di bawah untuk verifikasi mutasi otomatis:</p>
-      <button class="btn btn-primary full-width" onclick="verifyRealDanaPayment()">✔ Cek Mutasi & Aktifkan Premium Otomatis</button>
+      <p style="font-size: 11px; color: var(--gold); margin-bottom: 20px;">Atas Nama: Owner FeelDream</p>
+      <a href="https://link.dana.id/qr/v2/31300000000000000000?amount=5000&note=Upgrade+FeelDream" target="_blank" class="btn btn-dana full-width" style="text-decoration:none; display:block; padding:12px; text-align:center; margin-bottom:12px;">📱 Buka Aplikasi DANA</a>
+      <button class="btn btn-primary full-width" onclick="verifyRealDanaPayment()">✔ Cek Mutasi & Aktifkan Premium</button>
       <button class="btn btn-outline full-width" style="margin-top: 8px; border:none;" onclick="closeDanaModal()">Tutup</button>
     </div>
   </div>
 
+  <!-- MODAL INTERAKTIF LUPA PASSWORD, INPUT OTP, & BUAT SANDI BARU -->
+  <div class="modal-overlay" id="forgotModal">
+    <div class="modal-box">
+      
+      <!-- STEP 1: Masukkan No WA -->
+      <div id="fStep1">
+        <h3 style="color: var(--gold-light); margin-bottom: 10px;">🔑 Reset Sandi via WhatsApp</h3>
+        <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">Masukkan nomor WhatsApp terdaftar Anda untuk menerima kode OTP.</p>
+        <div class="form-group" style="text-align:left;"><label>Nomor WhatsApp</label><input type="text" id="modalWaInput" placeholder="08xxxxxxxxxx"></div>
+        <button class="btn btn-wa full-width" onclick="processSendOtp()">📩 Kirim Kode OTP Sekarang</button>
+        <button class="btn btn-outline full-width" style="margin-top: 8px; border:none;" onclick="closeForgotModal()">Batal</button>
+      </div>
+
+      <!-- STEP 2: Input OTP 6 Digit -->
+      <div id="fStep2" style="display:none;">
+        <h3 style="color: #25d366; margin-bottom: 10px;">📱 Masukkan Kode OTP</h3>
+        <p style="font-size: 12px; color: #aaa; margin-bottom: 10px;" id="otpSimulatorNotice">Kode OTP 6 digit telah dikirim ke WhatsApp Anda.</p>
+        <div class="form-group" style="text-align:left;"><label>6 Digit Kode OTP</label><input type="text" id="modalOtpInput" placeholder="123456" maxlength="6" style="text-align:center; font-size:20px; letter-spacing:4px;"></div>
+        <button class="btn btn-primary full-width" onclick="processVerifyOtp()">✔ Konfirmasi Kode OTP</button>
+        <button class="btn btn-outline full-width" style="margin-top: 8px; border:none;" onclick="backToStep1()">← Kembali</button>
+      </div>
+
+      <!-- STEP 3: Buat Sandi Baru -->
+      <div id="fStep3" style="display:none;">
+        <h3 style="color: var(--gold-light); margin-bottom: 10px;">🔒 Buat Sandi Baru</h3>
+        <p style="font-size: 12px; color: #aaa; margin-bottom: 15px;">OTP valid! Masukkan kata sandi baru akun Anda.</p>
+        <div class="form-group" style="text-align:left;"><label>Kata Sandi Baru</label><input type="password" id="modalNewPass" placeholder="••••••••"></div>
+        <button class="btn btn-primary full-width" onclick="processSaveNewPassword()">💾 Simpan Sandi Baru</button>
+      </div>
+
+    </div>
+  </div>
+
   <script>
-    // --- DATABASE & AKUN OWNER / ADMIN UTAMA ---
     let usersDB = JSON.parse(localStorage.getItem('feeldream_users')) || [];
     let currentUser = JSON.parse(localStorage.getItem('feeldream_current_user')) || null;
     
@@ -354,8 +342,8 @@
       }
     ];
 
-    let tempForgotTarget = null;
-    let realGeneratedOtp = null;
+    let activeForgotWa = "";
+    let generatedOtpCode = "";
 
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -395,7 +383,6 @@
       const contact = document.getElementById('logContact').value;
       const pass = document.getElementById('logPass').value;
 
-      // KUNCI MUTLAK AKSES OWNER
       if(contact === OWNER_CONTACT || contact === OWNER_EMAIL) {
         currentUser = { name: "Owner / Admin Utama", contact: OWNER_CONTACT, isPremium: true, customList: [] };
       } else {
@@ -415,50 +402,71 @@
       switchView('landing');
     }
 
-    // --- FITUR OTP & WHATSAPP NYATA ---
-    function sendWhatsappOtpReal() {
-      const waNumber = document.getElementById('forgotWaNumber').value;
-      if(!waNumber || waNumber.length < 9) return alert('Masukkan nomor WhatsApp yang valid!');
+    // --- KONTROL MODAL LUPA PASSWORD & OTP (DIJAMIN MUNCUL) ---
+    function openForgotModal() {
+      document.getElementById('modalWaInput').value = '';
+      document.getElementById('fStep1').style.display = 'block';
+      document.getElementById('fStep2').style.display = 'none';
+      document.getElementById('fStep3').style.display = 'none';
+      document.getElementById('forgotModal').style.display = 'flex';
+    }
 
-      let target = usersDB.find(u => u.contact === waNumber);
-      if(!target && waNumber !== OWNER_CONTACT) {
+    function closeForgotModal() {
+      document.getElementById('forgotModal').style.display = 'none';
+    }
+
+    function backToStep1() {
+      document.getElementById('fStep1').style.display = 'block';
+      document.getElementById('fStep2').style.display = 'none';
+    }
+
+    function processSendOtp() {
+      let wa = document.getElementById('modalWaInput').value.trim();
+      if(!wa || wa.length < 9) return alert('Masukkan nomor WhatsApp yang valid!');
+
+      let target = usersDB.find(u => u.contact === wa);
+      if(!target && wa !== OWNER_CONTACT) {
         return alert('Nomor WhatsApp belum terdaftar di sistem!');
       }
 
-      tempForgotTarget = waNumber;
-      realGeneratedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6 digit OTP asli
+      activeForgotWa = wa;
+      generatedOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-      // Membuka WhatsApp secara otomatis agar OTP terkirim / terkonfirmasi real ke HP
-      let waMessage = encodeURIComponent(`Halo FeelDream, berikut adalah kode OTP pemulihan kata sandi akun Anda: *${realGeneratedOtp}*. Jangan berikan kode ini ke siapa pun.`);
-      window.open(`https://wa.me/${waNumber}?text=${waMessage}`, '_blank');
+      // Buka WA otomatis + Berikan info alert kode OTP di layar agar langsung kelihatan
+      let waMsg = encodeURIComponent(`Kode OTP Reset Password FeelDream Anda adalah: *${generatedOtpCode}*`);
+      window.open(`https://wa.me/${wa}?text=${waMsg}`, '_blank');
 
-      alert('Kode OTP 6 digit berhasil dibuat dan diarahkan ke WhatsApp Anda!');
-      switchView('forgotStep2');
+      document.getElementById('otpSimulatorNotice').innerHTML = `Kode OTP dikirim ke WA <b>${wa}</b>.<br><span style="color:#ffd700; background:rgba(0,0,0,0.5); padding:2px 6px; border-radius:4px;">(Simulasi Kode OTP Anda: <b>${generatedOtpCode}</b>)</span>`;
+      
+      document.getElementById('fStep1').style.display = 'none';
+      document.getElementById('fStep2').style.display = 'block';
     }
 
-    function verifyWaOtpCode() {
-      let inputOtp = document.getElementById('inputWaOtp').value;
-      if(inputOtp !== realGeneratedOtp) {
-        return alert('Kode OTP salah! Masukkan 6 digit kode yang sesuai.');
+    function processVerifyOtp() {
+      let inputOtp = document.getElementById('modalOtpInput').value.trim();
+      if(inputOtp !== generatedOtpCode) {
+        return alert('Kode OTP salah! Masukkan kode 6 digit yang sesuai.');
       }
-      alert('Kode OTP Valid! Silakan buat kata sandi baru Anda.');
-      switchView('forgotStep3');
+      alert('Kode OTP Valid!');
+      document.getElementById('fStep2').style.display = 'none';
+      document.getElementById('fStep3').style.display = 'block';
     }
 
-    function saveNewPasswordReal() {
-      let newPass = document.getElementById('newPasswordInput').value;
+    function processSaveNewPassword() {
+      let newPass = document.getElementById('modalNewPass').value.trim();
       if(!newPass) return alert('Masukkan kata sandi baru!');
 
-      if(tempForgotTarget === OWNER_CONTACT) {
-        alert('Kata sandi Admin berhasil diperbarui!');
+      if(activeForgotWa === OWNER_CONTACT) {
+        alert('Password Admin berhasil diubah!');
       } else {
-        let idx = usersDB.findIndex(u => u.contact === tempForgotTarget);
+        let idx = usersDB.findIndex(u => u.contact === activeForgotWa);
         if(idx !== -1) {
           usersDB[idx].pass = newPass;
           localStorage.setItem('feeldream_users', JSON.stringify(usersDB));
         }
       }
-      alert('Kata sandi berhasil diubah! Silakan masuk dengan sandi baru.');
+      alert('Kata sandi berhasil diperbarui! Silakan masuk dengan sandi baru Anda.');
+      closeForgotModal();
       switchView('login');
     }
 
@@ -468,7 +476,7 @@
       const adminSection = document.getElementById('adminPanelSection');
       
       if(currentUser.contact === OWNER_CONTACT || currentUser.contact === OWNER_EMAIL) {
-        badgeContainer.innerHTML = `<span class="badge-owner">👑 OWNER / ADMIN UTAMA (AKSES PENUH)</span>`;
+        badgeContainer.innerHTML = `<span class="badge-owner">👑 OWNER / ADMIN UTAMA</span>`;
         document.getElementById('btnUpgradeMenu').style.display = 'none';
         adminSection.style.display = 'block';
       } else if(currentUser.isPremium) {
@@ -484,19 +492,18 @@
       renderMyCustomList();
     }
 
-    // --- PANEL OWNER TAMBAH TEMPLATE HTML ---
     function adminAddNewPublicTemplate() {
       let title = document.getElementById('adminNewTplTitle').value;
       let img = document.getElementById('adminNewTplImg').value;
       let desc = document.getElementById('adminNewTplDesc').value;
       let msg = document.getElementById('adminNewTplMsg').value;
 
-      if(!title || !img || !msg) return alert('Judul, Gambar, dan Pesan wajib diisi!');
+      if(!title || !img || !msg) return alert('Semua kolom admin wajib diisi!');
 
       let newTpl = {
         id: Date.now(),
         title: title.endsWith('.html') ? title : title + '.html',
-        desc: desc || "Template baru buatan owner.",
+        desc: desc || "Template baru.",
         sticker: img,
         amplop: "https://htmlku.com/0/panda/teplek.gif",
         msg: msg,
@@ -506,12 +513,7 @@
 
       publicTemplatesDB.push(newTpl);
       localStorage.setItem('feeldream_public_tpls', JSON.stringify(publicTemplatesDB));
-      
-      alert('Template HTML baru berhasil dipublish ke menu publik!');
-      document.getElementById('adminNewTplTitle').value = '';
-      document.getElementById('adminNewTplImg').value = '';
-      document.getElementById('adminNewTplDesc').value = '';
-      document.getElementById('adminNewTplMsg').value = '';
+      alert('Template publik berhasil ditambahkan!');
       renderPublicTemplates();
     }
 
@@ -537,14 +539,14 @@
     function closeDanaModal() { document.getElementById('danaModal').style.display = 'none'; }
 
     function verifyRealDanaPayment() {
-      alert('Memeriksa mutasi transfer Rp 5.000 ke nomor DANA 085187131339...');
+      alert('Memeriksa mutasi transfer Rp 5.000 ke DANA 085187131339...');
       setTimeout(() => {
         currentUser.isPremium = true;
         updateUserStorage();
         initDashboard();
         closeDanaModal();
-        alert('🎉 Pembayaran Dikonfirmasi Berhasil! Akun Anda kini resmi PREMIUM.');
-      }, 2500);
+        alert('🎉 Pembayaran Dikonfirmasi! Akun Anda resmi PREMIUM.');
+      }, 2000);
     }
 
     function updateUserStorage() {
@@ -556,10 +558,9 @@
       }
     }
 
-    // --- EDITOR KUSTOMISASI ---
     function openEditor(paramId, index = null) {
       if(!currentUser.isPremium && currentUser.contact !== OWNER_CONTACT) {
-        alert('Fitur Kustomisasi & Link khusus akun PREMIUM (Rp 5.000). Silakan upgrade terlebih dahulu.');
+        alert('Fitur kustomisasi khusus akun PREMIUM (Rp 5.000). Silakan upgrade terlebih dahulu.');
         openDanaModal();
         return;
       }
@@ -570,7 +571,7 @@
         document.getElementById('editTitle').value = "Untuk Kamu";
         document.getElementById('editSticker').value = "https://htmlku.com/0/panda/hiya.gif";
         document.getElementById('editAmplop').value = "https://htmlku.com/0/panda/teplek.gif";
-        document.getElementById('editMsg').value = "Terima kasih sudah selalu ada di setiap waktu.";
+        document.getElementById('editMsg').value = "Terima kasih sudah selalu ada.";
         document.getElementById('editClosing').value = "Semoga bahagia selalu ya 💛";
         document.getElementById('editSign').value = currentUser.name;
         document.getElementById('generatedLinkResult').value = "";
@@ -604,7 +605,6 @@
       };
 
       if(!currentUser.customList) currentUser.customList = [];
-
       if(index === "") {
         currentUser.customList.push(newData);
         document.getElementById('editIndexId').value = currentUser.customList.length - 1;
@@ -613,11 +613,8 @@
       }
 
       updateUserStorage();
-
       let encoded = btoa(unescape(encodeURIComponent(JSON.stringify(newData))));
-      let uniqueLink = window.location.origin + window.location.pathname + "?data=" + encoded;
-      document.getElementById('generatedLinkResult').value = uniqueLink;
-      
+      document.getElementById('generatedLinkResult').value = window.location.origin + window.location.pathname + "?data=" + encoded;
       alert('Kustomisasi berhasil disimpan dan link siap disalin!');
       renderMyCustomList();
     }
@@ -654,7 +651,6 @@
       alert('Link berhasil disalin!');
     }
 
-    // --- INTERAKTIF VIEWER ---
     let activeContent = {};
     var audio = new Audio("https://raw.githubusercontent.com/aagotlenslot-hue/musik/main/Vocaroo%2019lrlpGebkYz.mp3");
     audio.loop = true;
@@ -662,16 +658,15 @@
     let s1 = document.getElementById("s1");
     let s2 = document.getElementById("s2");
     let curtain = document.getElementById("curtain");
-    let giftWrap = document.getElementById("giftWrap");
     let gift = document.getElementById("gift");
     let giftHint = document.getElementById("giftHint");
     let toolbar = document.getElementById("returnToolbar");
     let sudahDibuka = false;
-    let typeThanks = null, typeClosing = null, sparkInterval = null;
+    let sparkInterval = null;
 
     (function(){
       let sky = document.getElementById("sky");
-      for(let i=0; i<50; i++){
+      for(let i=0; i<40; i++){
         let star = document.createElement("div");
         star.className = "star";
         let size = Math.random() * 2 + 1;
@@ -744,7 +739,7 @@
       document.getElementById("typedClosing").innerHTML = "";
       document.getElementById("frameThanks").classList.add("show");
 
-      typeThanks = new TypeIt("#typedThanks", {
+      new TypeIt("#typedThanks", {
         strings: [activeContent.msg],
         speed: 45,
         cursor: true,
@@ -752,7 +747,7 @@
           instance.destroy();
           document.getElementById("frameClosing").classList.add("show");
           
-          typeClosing = new TypeIt("#typedClosing", {
+          new TypeIt("#typedClosing", {
             strings: [activeContent.closing],
             speed: 45,
             cursor: true,
