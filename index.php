@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<title>FeelDream - Platform Kustomisasi Ucapan Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+<style>
+  :root {
+    --bg: #07060a;
+    --bg2: #0d0a12;
+    --gold: #d9b25c;
+    --gold-light: #f4e1ab;
+    --gold-dim: #7a5f28;
+    --cream: #f3ecdd;
+    --card: rgba(24,19,14,.75);
+    --line: rgba(217,178,92,.35);
+    --serif: 'Playfair Display', serif;
+    --script: 'Cormorant Garamond', serif;
+    --sans: 'Poppins', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--sans); }
+  body { background: var(--bg); color: var(--cream); min-height: 100vh; overflow-x: hidden; position: relative; }
+
+  /* NAVIGATION UTAMA PLATFORM */
+  nav.main-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(13,10,18,0.95); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 22px; font-weight: 700; color: #ff7eb3; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .nav-links { display: flex; gap: 15px; align-items: center; }
+  .btn { padding: 10px 20px; border-radius: 30px; border: none; font-weight: 500; cursor: pointer; transition: 0.3s; }
+  .btn-primary { background: linear-gradient(135deg, #d96570, #c84b63); color: white; }
+  .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold-light); }
+  .btn:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  /* VIEWS PLATFORM */
+  .platform-view { display: none; padding: 40px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
+  .platform-view.active { display: block; }
+
+  /* LANDING & AUTH STYLES */
+  .hero { text-align: center; padding: 60px 20px; }
+  .hero h1 { font-size: clamp(32px, 6vw, 54px); margin-bottom: 20px; color: #fff; }
+  .hero h1 span { color: #ff7eb3; }
+  .hero p { color: #a09cb0; max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
+
+  .auth-container { max-width: 420px; margin: 40px auto; background: var(--card); border: 1px solid var(--line); padding: 30px; border-radius: 12px; backdrop-filter: blur(10px); }
+  .auth-container h2 { margin-bottom: 20px; color: var(--gold-light); text-align: center; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-size: 13px; margin-bottom: 5px; color: var(--gold); }
+  .form-group input, .form-group textarea { width: 100%; padding: 12px; border-radius: 8px; background: #1a1528; border: 1px solid var(--line); color: #fff; outline: none; }
+  .form-group textarea { resize: vertical; height: 90px; }
+  .form-group input:focus, .form-group textarea:focus { border-color: #ff7eb3; }
+  .full-width { width: 100%; margin-top: 10px; }
+
+  /* DASHBOARD */
+  .welcome-banner { background: var(--card); border: 1px solid var(--line); padding: 25px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+  .badge-premium { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; margin-top: 5px; }
+  .badge-free { background: #444; color: #ccc; padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; }
+  
+  .section-title { margin: 25px 0 15px; color: var(--gold-light); display: flex; justify-content: space-between; align-items: center; }
+  .grid-templates { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .template-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; padding: 15px; }
+  .template-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+  .template-card h3 { font-size: 16px; margin-bottom: 5px; color: #fff; }
+  .template-card p { font-size: 12px; color: #aaa; margin-bottom: 15px; }
+  .card-actions { display: flex; gap: 10px; }
+
+  /* PAYMENT MODAL (DANA) */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999999; }
+  .modal-box { background: #130f1d; border: 1px solid var(--gold); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; }
+  .dana-number { font-size: 22px; font-weight: 700; color: var(--gold-light); margin: 10px 0; background: rgba(217,178,92,0.1); padding: 12px; border-radius: 6px; letter-spacing: 1px; }
+
+  /* TEMPLATE INTERAKTIF VIEWER */
+  #template-viewer-container { display: none; position: fixed; inset: 0; z-index: 90000; background: var(--bg); overflow: hidden; }
+  #template-viewer-container.active { display: block; }
+
+  #sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(ellipse at 50% -10%, rgba(217,178,92,.10), transparent 55%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+  .star { position: absolute; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 6px 1px rgba(244,225,171,.6); animation: twinkle 3.2s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100%{ opacity:.15; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
+
+  .bigstar { position: fixed; top: 38%; left: -15%; width: 6px; height: 6px; border-radius: 50%; background: #fff; z-index: 100; box-shadow: 0 0 16px 4px rgba(255,255,255,.9); animation: flyBig 1.1s cubic-bezier(.3,.6,.3,1) forwards; }
+  .bigstar::after { content:""; position: absolute; top: 50%; right: 0; width: 340px; height: 4px; transform: translateY(-50%); background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #ff6b6b 10%, #ffd166 28%, #f4e1ab 45%, #6bd4ff 62%, #b06bff 80%, rgba(255,255,255,0) 100%); opacity: .95; }
+  @keyframes flyBig { 0%{ transform:translate(0,0) scale(.6); opacity:0; } 12%{ opacity:1; transform:translate(20vw,-6vh) scale(1); } 100%{ transform:translate(135vw,-46vh) scale(1.1); opacity:0; } }
+
+  #curtain { position: fixed; inset: 0; z-index: 500; pointer-events: none; background: radial-gradient(circle at 50% 50%, var(--gold-light) 0%, var(--gold) 35%, #1a1408 100%); clip-path: circle(0% at 50% 50%); transition: clip-path .9s cubic-bezier(.7,0,.3,1); }
+
+  .tpl-page { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
+  .tpl-page.hidden { display: none; }
+
+  .eyebrow { font-family: var(--sans); letter-spacing: .35em; text-transform: uppercase; font-size: 11px; color: var(--gold); opacity: .85; margin-bottom: 18px; }
+  .tpl-page h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(28px, 7vw, 44px); line-height: 1.25; margin: 0 0 10px; color: var(--gold-light); }
+  .sub { font-family: var(--script); font-style: italic; font-size: 20px; color: var(--gold); opacity: .9; margin: 0 0 44px; }
+
+  #giftStage { position: relative; width: 190px; height: 190px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+  #ringGold { position: absolute; top: 50%; left: 50%; width: 190px; height: 190px; transform: translate(-50%,-50%); border-radius: 50%; border: 1px solid var(--line); animation: spin 14s linear infinite; }
+  @keyframes spin { to{ transform: translate(-50%,-50%) rotate(360deg); } }
+
+  #giftWrap { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
+  #gift { width: 112px; height: 112px; display: flex; align-items: center; justify-content: center; animation: wiggle 2.6s ease-in-out infinite; }
+  #gift img { width: 112px; height: 112px; object-fit: cover; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 22px rgba(217,178,92,.4); }
+  @keyframes wiggle { 0%,100%{ transform:rotate(-4deg); } 50%{ transform:rotate(4deg); } }
+  #giftHint { margin-top: 22px; font-size: 13px; letter-spacing: .08em; color: var(--gold); opacity: .75; }
+
+  #s2 { overflow-y: auto; padding-top: 60px; padding-bottom: 110px; justify-content: flex-start; }
+  .frame { width: 100%; max-width: 480px; opacity: 0; transform: translateY(18px) scale(.98); transition: all .8s cubic-bezier(.2,.8,.2,1); }
+  .frame.show { opacity: 1; transform: translateY(0) scale(1); }
+  .frame + .frame { margin-top: 18px; }
+
+  .tpl-card-box { position: relative; background: var(--card); backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 4px; padding: 32px 26px; text-align: left; box-shadow: 0 20px 60px rgba(0,0,0,.55); }
+  .tpl-card-box .label { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); opacity: .8; margin-bottom: 14px; }
+  #typedThanks, #typedClosing { font-family: var(--script); font-size: 19px; line-height: 1.65; color: var(--cream); }
+  #typedClosing { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--gold-light); }
+  .ti-cursor { color: var(--gold) !important; }
+  .signoff { margin-top: 32px; font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--gold); opacity: 0; transition: opacity 1s ease; }
+  .signoff.show { opacity: .9; }
+
+  .spark { position: fixed; top: -5vh; z-index: 200; font-size: 14px; color: var(--gold-light); animation: fall linear forwards; pointer-events: none; }
+  @keyframes fall { 0%{ transform: translateY(0) rotate(0deg); opacity: 0; } 10%{ opacity: 1; } 100%{ transform: translateY(110vh) rotate(240deg); opacity: 0; } }
+
+  #returnToolbar { position: fixed; left: 50%; bottom: 20px; z-index: 99999; opacity: 0; visibility: hidden; pointer-events: none; transform: translateX(-50%) translateY(30px); transition: .5s; }
+  #returnToolbar.show { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  #btnKembali { border: 1px solid var(--gold); background: rgba(15,12,10,.96); color: var(--gold-light); padding: 12px 22px; border-radius: 30px; font-size: 12px; letter-spacing: .08em; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+  <!-- NAVBAR UTAMA -->
+  <nav class="main-nav" id="platformNav">
+    <div class="logo" onclick="switchView('landing')">✨ FeelDream</div>
+    <div class="nav-links">
+      <button class="btn btn-outline" onclick="switchView('login')">Masuk</button>
+      <button class="btn btn-primary" onclick="switchView('register')">Mulai Gratis</button>
+    </div>
+  </nav>
+
+  <!-- 1. LANDING PAGE -->
+  <section id="landing" class="platform-view active">
+    <div class="hero">
+      <h1>Ungkapkan Cinta dengan <span>Cara yang Tak Terlupakan</span></h1>
+      <p>Buat dan kustomisasi halaman ucapan digital interaktif berkesan romantis untuk orang tersayang.</p>
+      <button class="btn btn-primary" onclick="switchView('register')">Mulai Gratis Sekarang →</button>
+    </div>
+  </section>
+
+  <!-- 2. REGISTER PAGE -->
+  <section id="register" class="platform-view">
+    <div class="auth-container">
+      <h2>Buat Akun Baru</h2>
+      <div class="form-group"><label>Nama Lengkap</label><input type="text" id="regName" placeholder="Nama Anda"></div>
+      <div class="form-group"><label>Email / No HP (Untuk OTP)</label><input type="text" id="regContact" placeholder="email@gmail.com / 0812xxx"></div>
+      <div class="form-group"><label>Kata Sandi</label><input type="password" id="regPass" placeholder="••••••••"></div>
+      <button class="btn btn-primary full-width" onclick="handleRegister()">Kirim Kode OTP & Daftar</button>
+      <p style="text-align: center; margin-top: 15px; font-size: 13px; color: #aaa;">Sudah punya akun? <a href="#" onclick="switchView('login')" style="color:var(--gold)">Masuk</a></p>
+    </div>
+  </section>
+
+  <!-- 3. LOGIN PAGE -->
+  <section id="login" class="platform-view">
+    <div class="auth-container">
+      <h2>Masuk ke Akun</h2>
+      <div class="form-group"><label>Email / No HP</label><input type="text" id="logContact" placeholder="email@gmail.com / 0812xxx"></div>
+      <div class="form-group"><label>Kata Sandi</label><input type="password" id="logPass" placeholder="••••••••"></div>
+      <button class="btn btn-primary full-width" onclick="handleLogin()">Masuk →</button>
+      <p style="text-align: center; margin-top: 12px;"><a href="#" onclick="alert('Link pemulihan OTP dikirim ke kontak anda!')" style="font-size:12px; color:var(--gold);">Lupa Kata Sandi?</a></p>
+    </div>
+  </section>
+
+  <!-- 4. DASHBOARD UTAMA -->
+  <section id="dashboard" class="platform-view">
+    <div class="welcome-banner">
+      <div>
+        <h2 id="userGreeting" style="color: #fff; margin-bottom: 5px;">Selamat datang kembali!</h2>
+        <span id="userStatusBadge" class="badge-free">FREE ACCOUNT</span>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="btnUpgradeMenu" class="btn btn-primary" onclick="openDanaModal()">✨ Upgrade Premium (Rp 5.000)</button>
+        <button class="btn btn-outline" onclick="logout()">Keluar</button>
+      </div>
+    </div>
+
+    <!-- MENU 1: TEMPLATE UTAMA (LIHAT) -->
+    <div class="section-title"><h3>🌐 Template Publik (Lihat)</h3></div>
+    <div class="grid-templates">
+      <div class="template-card">
+        <img src="https://htmlku.com/0/panda/hiya.gif" alt="Template">
+        <h3>TERIMAHKASIH12.html</h3>
+        <p>Template Ucapan Terima Kasih Romantis Standar.</p>
+        <div class="card-actions">
+          <button class="btn btn-outline" style="width:100%;" onclick="previewPublicTemplate()">Lihat Template</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENU 2: KUSTOMISASI SAYA (TIDAK MERUBAH ASLI) -->
+    <div class="section-title">
+      <h3>🎨 Kustomisasi Saya</h3>
+      <button class="btn btn-primary" style="font-size:12px; padding:6px 15px;" onclick="openEditor('new')">+ Buat Kustomisasi Baru</button>
+    </div>
+    <div class="grid-templates" id="myCustomList">
+      <p style="color: #888; font-size: 13px;">Belum ada kustomisasi tersimpan. Klik tombol buat baru di atas!</p>
+    </div>
+  </section>
+
+  <!-- 5. EDITOR KUSTOMISASI -->
+  <section id="editorView" class="platform-view">
+    <div style="max-width: 650px; margin: 0 auto; background: var(--card); border: 1px solid var(--line); padding: 30px; border-radius: 12px;">
+      <h2 style="color: var(--gold-light); margin-bottom: 5px;">🎨 Editor Kustomisasi Pribadi</h2>
+      <p style="font-size: 13px; color: #a09cb0; margin-bottom: 20px;">Ubah isi pesan ini tanpa merusak template utama.</p>
+      
+      <input type="hidden" id="editIndexId" value="">
+      <div class="form-group"><label>Judul Kustomisasi (Nama Proyek)</label><input type="text" id="editProjectTitle" value="Untuk Pacarku Tersayang"></div>
+      <div class="form-group"><label>Judul Utama Halaman</label><input type="text" id="editTitle" value="Untuk Kamu"></div>
+      <div class="form-group"><label>URL Stiker / GIF Kado Awal</label><input type="text" id="editSticker" value="https://htmlku.com/0/panda/hiya.gif"></div>
+      <div class="form-group"><label>URL Stiker / GIF Amplop Terbuka</label><input type="text" id="editAmplop" value="https://htmlku.com/0/panda/teplek.gif"></div>
+      <div class="form-group"><label>Pesan Utama</label><textarea id="editMsg">Terima kasih sudah selalu ada, di saat senang maupun susah.</textarea></div>
+      <div class="form-group"><label>Pesan Penutup</label><textarea id="editClosing">Semoga kebaikan kamu selalu dibalas hal baik. Makasih ya 💛</textarea></div>
+      <div class="form-group"><label>Nama Pengirim (Signoff)</label><input type="text" id="editSign" value="ALDO KURNIAWANSA"></div>
+
+      <div style="background: rgba(217,178,92,0.08); border: 1px dashed var(--gold); padding: 15px; border-radius: 8px; margin: 20px 0;">
+        <label style="color: var(--gold); font-weight: 600; margin-bottom: 8px; display:block;">🔗 Link Bagikan Unik</label>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="generatedLinkResult" readonly style="background:#110e19; color:var(--gold-light);" placeholder="Simpan dulu untuk generate link...">
+          <button class="btn btn-outline" onclick="copyShareLink()" style="white-space: nowrap;">Salin Link</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveMyCustomData()">Simpan & Buat Link 💾</button>
+        <button class="btn btn-outline" onclick="switchView('dashboard')">Kembali ke Dashboard</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTAINER TEMPLATE INTERAKTIF -->
+  <div id="template-viewer-container">
+    <div id="sky"></div>
+    <div id="curtain"></div>
+
+    <section class="tpl-page" id="s1">
+      <div class="eyebrow">baca ye jangan di skip hooh</div>
+      <h1 id="namaKamuJudul">Untuk Kamu</h1>
+      <p class="sub">ada sedikit yang mau aku sampaikan…</p>
+      <div id="giftStage">
+        <div id="ringGold"></div>
+        <div id="giftWrap">
+          <div id="gift"><img id="viewerGiftImg" src="https://htmlku.com/0/panda/hiya.gif" alt="gif"></div>
+        </div>
+      </div>
+      <div id="giftHint">tap layar nya ✨</div>
+    </section>
+
+    <section class="tpl-page hidden" id="s2">
+      <div class="frame" id="frameThanks">
+        <div class="tpl-card-box">
+          <div class="label">Terima kasih untuk…</div>
+          <div id="typedThanks"></div>
+        </div>
+      </div>
+      <div class="frame" id="frameClosing">
+        <div class="tpl-card-box">
+          <div class="label">Pesan Penutup</div>
+          <div id="typedClosing"></div>
+          <div class="signoff" id="signoff">— dari <span id="viewerSignName">ALDO</span>, untuk kamu 🤍</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="returnToolbar">
+      <button type="button" id="btnKembali">
+        <span style="font-size:18px;">↩</span>
+        <span id="btnKembaliText">Kembali ke Dashboard</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 6. PAYMENT MODAL DANA & PANEL ADMIN -->
+  <div class="modal-overlay" id="danaModal">
+    <div class="modal-box">
+      <h3 style="color: #ff7eb3;">Aktivasi Fitur Premium (Rp 5.000)</h3>
+      <p style="font-size: 13px; color: #ccc; margin-top: 5px;">Silakan Transfer via DANA ke nomor berikut:</p>
+      <div class="dana-number">085187131339</div>
+      <p style="font-size: 11px; color: #aaa; margin-bottom: 15px;">Setelah transfer, masukkan nomor HP pengirim Anda untuk konfirmasi otomatis admin:</p>
+      <input type="text" id="confirmDanaNo" placeholder="No DANA Pengirim Anda" style="width:100%; padding:10px; margin-bottom:12px; background:#1a1528; border:1px solid var(--line); color:#fff; border-radius:6px;">
+      <button class="btn btn-primary full-width" onclick="submitDanaConfirmation()">Konfirmasi Pembayaran</button>
+      <button class="btn btn-outline full-width" style="margin-top: 5px; border:none;" onclick="closeDanaModal()">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    // --- DATABASE LOKAL & SIMULASI AKUN ADMIN ---
+    let usersDB = JSON.parse(localStorage.getItem('feeldream_users')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('feeldream_current_user')) || null;
+    
+    // Admin Khusus Anda
+    const ADMIN_CONTACT = "admin@feeldream.com"; 
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const dataEncoded = urlParams.get('data');
+      if(dataEncoded) {
+        try {
+          const decodedJson = decodeURIComponent(escape(atob(dataEncoded)));
+          const parsedData = JSON.parse(decodedJson);
+          renderSharedTemplate(parsedData);
+        } catch(e) { console.error("Link rusak"); }
+      } else if(currentUser) {
+        initDashboard();
+        switchView('dashboard');
+      }
+    });
+
+    function switchView(viewId) {
+      document.querySelectorAll('.platform-view').forEach(v => v.classList.remove('active'));
+      document.getElementById('template-viewer-container').classList.remove('active');
+      document.getElementById('platformNav').style.display = 'flex';
+      document.getElementById(viewId).classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    function handleRegister() {
+      const name = document.getElementById('regName').value;
+      const contact = document.getElementById('regContact').value;
+      const pass = document.getElementById('regPass').value;
+      if(!name || !contact || !pass) return alert('Semua kolom wajib diisi!');
+      
+      usersDB.push({ name, contact, pass, isPremium: false, customList: [] });
+      localStorage.setItem('feeldream_users', JSON.stringify(usersDB));
+      alert(`Kode OTP berhasil dikirim ke ${contact} (Simulasi: OTP Terkirim Sukses)!`);
+      switchView('login');
+    }
+
+    function handleLogin() {
+      const contact = document.getElementById('logContact').value;
+      const pass = document.getElementById('logPass').value;
+
+      // Cek apakah Akun Admin Utama
+      if(contact === ADMIN_CONTACT || contact === "085187131339") {
+        currentUser = { name: "Admin Utama", contact: ADMIN_CONTACT, isPremium: true, customList: [] };
+      } else {
+        let found = usersDB.find(u => u.contact === contact && u.pass === pass);
+        if(!found) return alert('Email/No HP atau Password salah!');
+        currentUser = found;
+      }
+      
+      localStorage.setItem('feeldream_current_user', JSON.stringify(currentUser));
+      initDashboard();
+      switchView('dashboard');
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('feeldream_current_user');
+      switchView('landing');
+    }
+
+    function initDashboard() {
+      document.getElementById('userGreeting').innerText = `Halo, ${currentUser.name}!`;
+      const badge = document.getElementById('userStatusBadge');
+      
+      // Admin otomatis bebas akses premium tanpa bayar
+      if(currentUser.contact === ADMIN_CONTACT || currentUser.isPremium) {
+        badge.className = 'badge-premium';
+        badge.innerHTML = '✨ PREMIUM ACTIVE';
+        document.getElementById('btnUpgradeMenu').style.display = 'none';
+      } else {
+        badge.className = 'badge-free';
+        badge.innerHTML = 'FREE ACCOUNT';
+        document.getElementById('btnUpgradeMenu').style.display = 'inline-block';
+      }
+      renderMyCustomList();
+    }
+
+    function openDanaModal() { document.getElementById('danaModal').style.display = 'flex'; }
+    function closeDanaModal() { document.getElementById('danaModal').style.display = 'none'; }
+
+    function submitDanaConfirmation() {
+      const noHp = document.getElementById('confirmDanaNo').value;
+      if(!noHp) return alert('Masukkan nomor DANA Anda!');
+      alert('Konfirmasi terkirim! Admin (085187131339) akan segera memverifikasi mutasi. Jika dana masuk, sistem otomatis membuka status Premium Anda.');
+      closeDanaModal();
+      
+      // Simulasi persetujuan otomatis oleh admin untuk memudahkan uji coba Anda:
+      setTimeout(() => {
+        currentUser.isPremium = true;
+        updateUserStorage();
+        initDashboard();
+        alert('🎉 Hore! Pembayaran terverifikasi otomatis oleh Admin. Akun Anda kini sudah PREMIUM!');
+      }, 3000);
+    }
+
+    function updateUserStorage() {
+      localStorage.setItem('feeldream_current_user', JSON.stringify(currentUser));
+      let idx = usersDB.findIndex(u => u.contact === currentUser.contact);
+      if(idx !== -1) {
+        usersDB[idx] = currentUser;
+        localStorage.setItem('feeldream_users', JSON.stringify(usersDB));
+      }
+    }
+
+    // --- MANAJEMEN KUSTOMISASI SAYA ---
+    function openEditor(paramId, index = null) {
+      if(!currentUser.isPremium && currentUser.contact !== ADMIN_CONTACT) {
+        alert('Fitur Kustomisasi & Buat Link khusus Akun PREMIUM (Rp 5.000). Silakan upgrade terlebih dahulu!');
+        openDanaModal();
+        return;
+      }
+
+      if(paramId === 'new') {
+        document.getElementById('editIndexId').value = "";
+        document.getElementById('editProjectTitle').value = "Proyek Ucapan Baru";
+        document.getElementById('editTitle').value = "Untuk Kamu";
+        document.getElementById('editSticker').value = "https://htmlku.com/0/panda/hiya.gif";
+        document.getElementById('editAmplop').value = "https://htmlku.com/0/panda/teplek.gif";
+        document.getElementById('editMsg').value = "Terima kasih sudah selalu ada di setiap waktu.";
+        document.getElementById('editClosing').value = "Semoga bahagia selalu ya 💛";
+        document.getElementById('editSign').value = currentUser.name;
+        document.getElementById('generatedLinkResult').value = "";
+      } else {
+        let item = currentUser.customList[index];
+        document.getElementById('editIndexId').value = index;
+        document.getElementById('editProjectTitle').value = item.projectTitle;
+        document.getElementById('editTitle').value = item.title;
+        document.getElementById('editSticker').value = item.sticker;
+        document.getElementById('editAmplop').value = item.amplop;
+        document.getElementById('editMsg').value = item.msg;
+        document.getElementById('editClosing').value = item.closing;
+        document.getElementById('editSign').value = item.sign;
+        
+        let encoded = btoa(unescape(encodeURIComponent(JSON.stringify(item))));
+        document.getElementById('generatedLinkResult').value = window.location.origin + window.location.pathname + "?data=" + encoded;
+      }
+      switchView('editorView');
+    }
+
+    function saveMyCustomData() {
+      let index = document.getElementById('editIndexId').value;
+      let newData = {
+        projectTitle: document.getElementById('editProjectTitle').value,
+        title: document.getElementById('editTitle').value,
+        sticker: document.getElementById('editSticker').value,
+        amplop: document.getElementById('editAmplop').value,
+        msg: document.getElementById('editMsg').value,
+        closing: document.getElementById('editClosing').value,
+        sign: document.getElementById('editSign').value
+      };
+
+      if(!currentUser.customList) currentUser.customList = [];
+
+      if(index === "") {
+        currentUser.customList.push(newData);
+        document.getElementById('editIndexId').value = currentUser.customList.length - 1;
+      } else {
+        currentUser.customList[index] = newData;
+      }
+
+      updateUserStorage();
+
+      let encoded = btoa(unescape(encodeURIComponent(JSON.stringify(newData))));
+      let uniqueLink = window.location.origin + window.location.pathname + "?data=" + encoded;
+      document.getElementById('generatedLinkResult').value = uniqueLink;
+      
+      alert('Kustomisasi berhasil disimpan di "Kustomisasi Saya"! Link siap disalin.');
+      renderMyCustomList();
+    }
+
+    function renderMyCustomList() {
+      let container = document.getElementById('myCustomList');
+      if(!currentUser.customList || currentUser.customList.length === 0) {
+        container.innerHTML = '<p style="color: #888; font-size: 13px;">Belum ada kustomisasi tersimpan.</p>';
+        return;
+      }
+
+      let html = '';
+      currentUser.customList.forEach((item, idx) => {
+        html += `
+          <div class="template-card">
+            <img src="${item.sticker}" alt="Preview">
+            <h3>${item.projectTitle}</h3>
+            <p>Penerima / Judul: ${item.title}</p>
+            <div class="card-actions">
+              <button class="btn btn-outline" style="flex:1;" onclick="openEditor('edit', ${idx})">Edit</button>
+              <button class="btn btn-primary" style="flex:1;" onclick="previewMyCustom(${idx})">Preview</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function copyShareLink() {
+      const input = document.getElementById('generatedLinkResult');
+      if(!input.value) return alert('Simpan kustomisasi terlebih dahulu untuk menghasilkan link!');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert('Link berhasil disalin!');
+    }
+
+    // --- INTERAKTIF VIEWER ---
+    let activeContent = {};
+    var audio = new Audio("https://raw.githubusercontent.com/aagotlenslot-hue/musik/main/Vocaroo%2019lrlpGebkYz.mp3");
+    audio.loop = true;
+
+    let s1 = document.getElementById("s1");
+    let s2 = document.getElementById("s2");
+    let curtain = document.getElementById("curtain");
+    let giftWrap = document.getElementById("giftWrap");
+    let gift = document.getElementById("gift");
+    let giftHint = document.getElementById("giftHint");
+    let toolbar = document.getElementById("returnToolbar");
+    let btnKembali = document.getElementById("btnKembali");
+    let sudahDibuka = false;
+    let typeThanks = null, typeClosing = null, sparkInterval = null;
+
+    (function(){
+      let sky = document.getElementById("sky");
+      for(let i=0; i<50; i++){
+        let star = document.createElement("div");
+        star.className = "star";
+        let size = Math.random() * 2 + 1;
+        star.style.width = size + "px"; star.style.height = size + "px";
+        star.style.top = Math.random() * 100 + "%"; star.style.left = Math.random() * 100 + "%";
+        sky.appendChild(star);
+      }
+    })();
+
+    function previewPublicTemplate() {
+      activeContent = {
+        title: "Untuk Kamu",
+        sticker: "https://htmlku.com/0/panda/hiya.gif",
+        amplop: "https://htmlku.com/0/panda/teplek.gif",
+        msg: "Terima kasih sudah selalu ada, di saat senang maupun susah.",
+        closing: "Semoga kebaikan kamu dibalas kebaikan berlipat ganda 💛",
+        sign: "ALDO KURNIAWANSA"
+      };
+      launchViewer();
+    }
+
+    function previewMyCustom(idx) {
+      activeContent = currentUser.customList[idx];
+      launchViewer();
+    }
+
+    function renderSharedTemplate(data) {
+      activeContent = data;
+      document.getElementById('platformNav').style.display = 'none';
+      launchViewer();
+    }
+
+    function launchViewer() {
+      document.getElementById('namaKamuJudul').innerText = activeContent.title;
+      document.getElementById('viewerGiftImg').src = activeContent.sticker;
+      document.getElementById('viewerSignName').innerText = activeContent.sign;
+      document.getElementById('platformNav').style.display = 'none';
+      document.querySelectorAll('.platform-view').forEach(v => v.classList.remove('active'));
+      document.getElementById('template-viewer-container').classList.add('active');
+    }
+
+    function bukaHadiah() {
+      if(sudahDibuka) return;
+      sudahDibuka = true;
+      audio.currentTime = 0;
+      audio.play().catch(e=>{});
+
+      gift.innerHTML = `<img src="${activeContent.amplop}" alt="envelope">`;
+      giftHint.style.opacity = "0";
+
+      setTimeout(() => {
+        let b = document.createElement("div");
+        b.className = "bigstar";
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 1300);
+      }, 300);
+
+      setTimeout(() => {
+        curtain.style.clipPath = "circle(150% at 50% 50%)";
+        setTimeout(() => {
+          s1.classList.add("hidden");
+          s2.classList.remove("hidden");
+          curtain.style.clipPath = "circle(0% at 50% 50%)";
+          setTimeout(mulaiKetik, 650);
+        }, 900);
+      }, 1500);
+    }
+
+    function mulaiKetik() {
+      document.getElementById("typedThanks").innerHTML = "";
+      document.getElementById("typedClosing").innerHTML = "";
+      document.getElementById("frameThanks").classList.add("show");
+
+      typeThanks = new TypeIt("#typedThanks", {
+        strings: [activeContent.msg], speed: 22, cursor: true,
+        afterComplete: function(){
+          setTimeout(() => {
+            document.getElementById("frameClosing").classList.add("show");
+            typeClosing = new TypeIt("#typedClosing", {
+              strings: [activeContent.closing], speed: 22, cursor: true,
+              afterComplete: function(){
+                document.getElementById("signoff").classList.add("show");
+                toolbar.classList.add("show");
+              }
+            });
+            typeClosing.go();
+          }, 400);
+        }
+      });
+      typeThanks.go();
+    }
+
+    function kembaliKeDashboard() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.get('data')) {
+        window.location.href = window.location.origin + window.location.pathname;
+        return;
+      }
+      audio.pause(); audio.currentTime = 0;
+      document.getElementById('template-viewer-container').classList.remove('active');
+      sudahDibuka = false;
+      switchView('dashboard');
+    }
+
+    // Event listeners tombol interaktif aman dari duplikasi
+    let newGiftWrap = giftWrap.cloneNode(true);
+    giftWrap.parentNode.replaceChild(newGiftWrap, giftWrap);
+    newGiftWrap.addEventListener("pointerdown", (e) => { e.preventDefault(); bukaHadiah(); });
+
+    let newBtnKembali = btnKembali.cloneNode(true);
+    btnKembali.parentNode.replaceChild(newBtnKembali, btnKembali);
+    newBtnKembali.addEventListener("pointerdown", (e) => { e.preventDefault(); kembaliKeDashboard(); });
+  </script>
+</body>
+</html>
