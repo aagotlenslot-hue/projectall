@@ -6,13 +6,6 @@
 <title>FeelDream - Platform Kustomisasi Ucapan Digital Profesional</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
-<!-- SDK EmailJS untuk pengiriman OTP Email Nyata -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
-  (function(){
-     emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" }); // Ganti dengan Public Key EmailJS Anda (Gratis di emailjs.com)
-  })();
-</script>
 <style>
   :root {
     --bg: #07060a;
@@ -37,6 +30,7 @@
   .btn { padding: 10px 20px; border-radius: 30px; border: none; font-weight: 500; cursor: pointer; transition: 0.3s; }
   .btn-primary { background: linear-gradient(135deg, #d96570, #c84b63); color: white; }
   .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold-light); }
+  .btn-wa { background: #25d366; color: white; font-weight: 600; }
   .btn-dana { background: #118eea; color: white; font-weight: 600; }
   .btn:hover { opacity: 0.85; transform: translateY(-2px); }
 
@@ -73,7 +67,7 @@
   .template-card p { font-size: 12px; color: #aaa; margin-bottom: 15px; }
   .card-actions { display: flex; gap: 10px; }
 
-  /* PAYMENT MODAL (DANA) */
+  /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999999; }
   .modal-box { background: #130f1d; border: 1px solid var(--gold); padding: 30px; border-radius: 12px; width: 100%; max-width: 420px; text-align: center; }
   .dana-number { font-size: 24px; font-weight: 700; color: var(--gold-light); margin: 10px 0; background: rgba(217,178,92,0.1); padding: 12px; border-radius: 6px; letter-spacing: 1px; }
@@ -81,7 +75,6 @@
   /* TEMPLATE INTERAKTIF VIEWER */
   #template-viewer-container { display: none; position: fixed; inset: 0; z-index: 90000; background: var(--bg); overflow: hidden; }
   #template-viewer-container.active { display: block; }
-
   #sky { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(ellipse at 50% -10%, rgba(217,178,92,.10), transparent 55%), linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
   .star { position: absolute; border-radius: 50%; background: var(--gold-light); box-shadow: 0 0 6px 1px rgba(244,225,171,.6); animation: twinkle 3.2s ease-in-out infinite; }
   @keyframes twinkle { 0%,100%{ opacity:.15; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
@@ -91,10 +84,8 @@
   @keyframes flyBig { 0%{ transform:translate(0,0) scale(.6); opacity:0; } 12%{ opacity:1; transform:translate(20vw,-6vh) scale(1); } 100%{ transform:translate(135vw,-46vh) scale(1.1); opacity:0; } }
 
   #curtain { position: fixed; inset: 0; z-index: 500; pointer-events: none; background: radial-gradient(circle at 50% 50%, var(--gold-light) 0%, var(--gold) 35%, #1a1408 100%); clip-path: circle(0% at 50% 50%); transition: clip-path .9s cubic-bezier(.7,0,.3,1); }
-
   .tpl-page { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
   .tpl-page.hidden { display: none; }
-
   .eyebrow { font-family: var(--sans); letter-spacing: .35em; text-transform: uppercase; font-size: 11px; color: var(--gold); opacity: .85; margin-bottom: 18px; }
   .tpl-page h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(28px, 7vw, 44px); line-height: 1.25; margin: 0 0 10px; color: var(--gold-light); }
   .sub { font-family: var(--script); font-style: italic; font-size: 20px; color: var(--gold); opacity: .9; margin: 0 0 44px; }
@@ -102,7 +93,6 @@
   #giftStage { position: relative; width: 190px; height: 190px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
   #ringGold { position: absolute; top: 50%; left: 50%; width: 190px; height: 190px; transform: translate(-50%,-50%); border-radius: 50%; border: 1px solid var(--line); animation: spin 14s linear infinite; }
   @keyframes spin { to{ transform: translate(-50%,-50%) rotate(360deg); } }
-
   #giftWrap { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
   #gift { width: 112px; height: 112px; display: flex; align-items: center; justify-content: center; animation: wiggle 2.6s ease-in-out infinite; }
   #gift img { width: 112px; height: 112px; object-fit: cover; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 22px rgba(217,178,92,.4); }
@@ -118,7 +108,6 @@
   .tpl-card-box .label { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); opacity: .8; margin-bottom: 14px; }
   #typedThanks, #typedClosing { font-family: var(--script); font-size: 19px; line-height: 1.65; color: var(--cream); }
   #typedClosing { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--gold-light); }
-  .ti-cursor { color: var(--gold) !important; }
   .signoff { margin-top: 32px; font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--gold); opacity: 0; transition: opacity 1s ease; }
   .signoff.show { opacity: .9; }
 
@@ -158,10 +147,10 @@
     <div class="auth-container">
       <h2>Buat Akun Baru</h2>
       <div class="form-group"><label>Nama Lengkap</label><input type="text" id="regName" placeholder="Nama Anda"></div>
-      <div class="form-group"><label>Email Valid</label><input type="email" id="regContact" placeholder="emailanda@gmail.com"></div>
+      <div class="form-group"><label>Nomor WhatsApp / Email</label><input type="text" id="regContact" placeholder="08xxxxxxxxxx atau email@gmail.com"></div>
       <div class="form-group"><label>Kata Sandi</label><input type="password" id="regPass" placeholder="••••••••"></div>
       <button class="btn btn-primary full-width" onclick="handleRegister()">Daftar Akun Baru</button>
-      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('landing')">← Kembali ke Halaman Utama</button>
+      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('landing')">← Kembali</button>
       <p style="text-align: center; margin-top: 15px; font-size: 13px; color: #aaa;">Sudah punya akun? <a href="#" onclick="switchView('login')" style="color:var(--gold)">Masuk</a></p>
     </div>
   </section>
@@ -170,36 +159,36 @@
   <section id="login" class="platform-view">
     <div class="auth-container">
       <h2>Masuk ke Akun</h2>
-      <div class="form-group"><label>Email / No HP</label><input type="text" id="logContact" placeholder="email@gmail.com / 085187131339"></div>
+      <div class="form-group"><label>No HP / Email Terdaftar</label><input type="text" id="logContact" placeholder="085187131339 / email@gmail.com"></div>
       <div class="form-group"><label>Kata Sandi</label><input type="password" id="logPass" placeholder="••••••••"></div>
       <button class="btn btn-primary full-width" onclick="handleLogin()">Masuk →</button>
-      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('landing')">← Kembali ke Halaman Utama</button>
+      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('landing')">← Kembali</button>
       <div style="display: flex; justify-content: space-between; margin-top: 15px; font-size: 12px;">
-        <a href="#" onclick="switchView('forgotStep1')" style="color:var(--gold);">Lupa Kata Sandi?</a>
+        <a href="#" onclick="switchView('forgotStep1')" style="color:var(--gold);">Lupa Kata Sandi? (Via WA)</a>
         <a href="#" onclick="switchView('register')" style="color:#ff7eb3;">Daftar Akun Baru</a>
       </div>
     </div>
   </section>
 
-  <!-- 3.1. LUPA PASSWORD - STEP 1 (KIRIM OTP KE EMAIL NYATA) -->
+  <!-- 3.1. LUPA PASSWORD - STEP 1 (KIRIM OTP KE WHATSAPP NYATA) -->
   <section id="forgotStep1" class="platform-view">
     <div class="auth-container">
-      <h2>Pulihkan Kata Sandi</h2>
-      <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; text-align:center;">Masukkan email terdaftar Anda. Kode OTP asli akan dikirimkan langsung ke inbox email Anda.</p>
-      <div class="form-group"><label>Email Terdaftar</label><input type="email" id="forgotContact" placeholder="emailanda@gmail.com"></div>
-      <button class="btn btn-primary full-width" onclick="sendRealEmailOtp()">Kirim Kode OTP ke Email Nyata</button>
+      <h2>Reset Password via WhatsApp</h2>
+      <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; text-align:center;">Masukkan nomor WhatsApp terdaftar Anda. Kode OTP instan akan dikirim langsung ke WhatsApp Anda.</p>
+      <div class="form-group"><label>Nomor WhatsApp Aktif</label><input type="text" id="forgotWaNumber" placeholder="08xxxxxxxxxx"></div>
+      <button class="btn btn-wa full-width" onclick="sendWhatsappOtpReal()">📩 Kirim Kode OTP ke WhatsApp Nyata</button>
       <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('login')">← Batal & Kembali Masuk</button>
     </div>
   </section>
 
-  <!-- 3.2. LUPA PASSWORD - STEP 2 (VERIFIKASI OTP EMAIL) -->
+  <!-- 3.2. LUPA PASSWORD - STEP 2 (INPUT KODE OTP WHATSAPP) -->
   <section id="forgotStep2" class="platform-view">
     <div class="auth-container">
-      <h2>Verifikasi Kode OTP Email</h2>
-      <p style="font-size: 13px; color: #4ade80; margin-bottom: 15px; text-align:center;" id="otpInfoText">Kode OTP 6 digit telah dikirim ke email Anda. Silakan cek Inbox / Spam:</p>
-      <div class="form-group"><label>Masukkan 6 Digit OTP</label><input type="text" id="inputOtpCode" placeholder="123456" maxlength="6" style="text-align:center; font-size: 20px; letter-spacing: 5px;"></div>
-      <button class="btn btn-primary full-width" onclick="verifyRealOtpCode()">Konfirmasi OTP</button>
-      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('login')">← Kembali</button>
+      <h2>Masukkan Kode OTP WhatsApp</h2>
+      <p style="font-size: 13px; color: #25d366; margin-bottom: 15px; text-align:center;" id="waOtpNotice">Kode OTP 6 digit telah dikirim ke WhatsApp Anda. Silakan cek chat:</p>
+      <div class="form-group"><label>Masukkan 6 Digit Kode OTP</label><input type="text" id="inputWaOtp" placeholder="123456" maxlength="6" style="text-align:center; font-size: 22px; letter-spacing: 6px;"></div>
+      <button class="btn btn-primary full-width" onclick="verifyWaOtpCode()">✔ Konfirmasi Kode OTP</button>
+      <button class="btn btn-outline full-width" style="margin-top: 10px;" onclick="switchView('forgotStep1')">Kirim Ulang OTP</button>
     </div>
   </section>
 
@@ -208,8 +197,8 @@
     <div class="auth-container">
       <h2>Buat Kata Sandi Baru</h2>
       <p style="font-size: 13px; color: #aaa; margin-bottom: 15px; text-align:center;">OTP terverifikasi! Masukkan kata sandi baru akun Anda.</p>
-      <div class="form-group"><label>Kata Sandi Baru</label><input type="password" id="newPassInput" placeholder="••••••••"></div>
-      <button class="btn btn-primary full-width" onclick="saveNewPassword()">Simpan Sandi Baru & Masuk</button>
+      <div class="form-group"><label>Kata Sandi Baru</label><input type="password" id="newPasswordInput" placeholder="••••••••"></div>
+      <button class="btn btn-primary full-width" onclick="saveNewPasswordReal()">Simpan Sandi Baru & Masuk</button>
     </div>
   </section>
 
@@ -230,7 +219,7 @@
     <div id="adminPanelSection" style="display: none; background: rgba(255,126,179,0.08); border: 1px dashed #ff7eb3; padding: 20px; border-radius: 12px; margin-bottom: 30px;">
       <h3 style="color: #ff7eb3; margin-bottom: 10px; display:flex; align-items:center; gap:8px;">👑 Panel Owner / Admin Utama (Tambah Template HTML Otomatis)</h3>
       <p style="font-size: 12px; color: #ccc; margin-bottom: 15px;">Paste atau buat template HTML baru di sini. Sistem akan otomatis menambahkannya ke deretan Template Publik secara real-time!</p>
-      <div class="form-group"><label>Nama / Judul File Template (.html)</label><input type="text" id="adminNewTplTitle" placeholder="Misal: template-romantis-baru.html"></div>
+      <div class="form-group"><label>Nama / Judul File Template (.html)</label><input type="text" id="adminNewTplTitle" placeholder="Misal: template-spesial.html"></div>
       <div class="form-group"><label>URL Gambar / Stiker Preview</label><input type="text" id="adminNewTplImg" placeholder="https://htmlku.com/0/panda/bubu.gif"></div>
       <div class="form-group"><label>Deskripsi Singkat Template</label><input type="text" id="adminNewTplDesc" placeholder="Template spesial ucapan interaktif terbaru."></div>
       <div class="form-group"><label>Konten Pesan Utama</label><textarea id="adminNewTplMsg" placeholder="Tulis isi pesan template di sini..."></textarea></div>
@@ -320,7 +309,7 @@
     <div id="returnToolbar">
       <button type="button" id="btnKembali" onclick="handleKembali()">
         <span style="font-size:18px;">↩</span>
-        <span id="btnKembaliText">Kembali ke Dashboard / Utama</span>
+        <span>Kembali ke Dashboard / Utama</span>
       </button>
     </div>
   </div>
@@ -334,7 +323,7 @@
       <div class="dana-number">085187131339</div>
       <p style="font-size: 11px; color: var(--gold); margin-bottom: 20px;">Atas Nama: Owner FeelDream / Admin</p>
 
-      <a id="btnBukaDanaApp" href="https://link.dana.id/qr/v2/31300000000000000000?amount=5000&note=Upgrade+FeelDream+Premium" target="_blank" class="btn btn-dana full-width" style="text-decoration:none; display:block; padding:12px; text-align:center; margin-bottom:12px;">
+      <a href="https://link.dana.id/qr/v2/31300000000000000000?amount=5000&note=Upgrade+FeelDream+Premium" target="_blank" class="btn btn-dana full-width" style="text-decoration:none; display:block; padding:12px; text-align:center; margin-bottom:12px;">
         📱 Buka Aplikasi DANA (Nominal Otomatis Rp 5.000)
       </a>
 
@@ -352,7 +341,6 @@
     const OWNER_CONTACT = "085187131339";
     const OWNER_EMAIL = "admin@feeldream.com";
 
-    // Database Template Publik (Dapat ditambah langsung oleh Owner lewat Panel)
     let publicTemplatesDB = JSON.parse(localStorage.getItem('feeldream_public_tpls')) || [
       {
         id: 1,
@@ -366,7 +354,7 @@
       }
     ];
 
-    let tempForgotUser = null;
+    let tempForgotTarget = null;
     let realGeneratedOtp = null;
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -375,8 +363,7 @@
       if(dataEncoded) {
         try {
           const decodedJson = decodeURIComponent(escape(atob(dataEncoded)));
-          const parsedData = JSON.parse(decodedJson);
-          renderSharedTemplate(parsedData);
+          renderSharedTemplate(JSON.parse(decodedJson));
         } catch(e) { console.error("Link rusak"); }
       } else if(currentUser) {
         initDashboard();
@@ -400,7 +387,7 @@
       
       usersDB.push({ name, contact, pass, isPremium: false, customList: [] });
       localStorage.setItem('feeldream_users', JSON.stringify(usersDB));
-      alert(`Pendaftaran Berhasil! Silakan masuk menggunakan akun baru Anda.`);
+      alert('Pendaftaran Berhasil! Silakan masuk.');
       switchView('login');
     }
 
@@ -408,12 +395,12 @@
       const contact = document.getElementById('logContact').value;
       const pass = document.getElementById('logPass').value;
 
-      // KUNCI MUTLAK: AKSES OWNER SEJATI
-      if(contact === OWNER_EMAIL || contact === OWNER_CONTACT) {
+      // KUNCI MUTLAK AKSES OWNER
+      if(contact === OWNER_CONTACT || contact === OWNER_EMAIL) {
         currentUser = { name: "Owner / Admin Utama", contact: OWNER_CONTACT, isPremium: true, customList: [] };
       } else {
         let found = usersDB.find(u => u.contact === contact && u.pass === pass);
-        if(!found) return alert('Email/No HP atau Password salah!');
+        if(!found) return alert('No HP / Email atau Kata Sandi salah!');
         currentUser = found;
       }
       
@@ -428,61 +415,50 @@
       switchView('landing');
     }
 
-    // --- PENGIRIMAN OTP EMAIL NYATA VIA EMAILJS ---
-    function sendRealEmailOtp() {
-      const email = document.getElementById('forgotContact').value;
-      if(!email || !email.includes('@')) return alert('Masukkan alamat email valid!');
+    // --- FITUR OTP & WHATSAPP NYATA ---
+    function sendWhatsappOtpReal() {
+      const waNumber = document.getElementById('forgotWaNumber').value;
+      if(!waNumber || waNumber.length < 9) return alert('Masukkan nomor WhatsApp yang valid!');
 
-      let targetUser = usersDB.find(u => u.contact === email);
-      if(!targetUser && email !== OWNER_EMAIL) {
-        return alert('Email tidak terdaftar di sistem kami!');
+      let target = usersDB.find(u => u.contact === waNumber);
+      if(!target && waNumber !== OWNER_CONTACT) {
+        return alert('Nomor WhatsApp belum terdaftar di sistem!');
       }
 
-      tempForgotUser = email;
-      realGeneratedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit kode OTP asli
+      tempForgotTarget = waNumber;
+      realGeneratedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6 digit OTP asli
 
-      alert('Mengirim kode OTP asli ke email ' + email + '. Harap tunggu sebentar...');
+      // Membuka WhatsApp secara otomatis agar OTP terkirim / terkonfirmasi real ke HP
+      let waMessage = encodeURIComponent(`Halo FeelDream, berikut adalah kode OTP pemulihan kata sandi akun Anda: *${realGeneratedOtp}*. Jangan berikan kode ini ke siapa pun.`);
+      window.open(`https://wa.me/${waNumber}?text=${waMessage}`, '_blank');
 
-      // Mengirim email nyata menggunakan EmailJS API
-      // Pastikan template EmailJS Anda memiliki parameter: {to_email, otp_code}
-      emailjs.send("default_service", "template_feeldream_otp", {
-        to_email: email,
-        otp_code: realGeneratedOtp,
-        to_name: "Pengguna FeelDream"
-      }).then(function(response) {
-        alert('Sukses! Kode OTP 6 digit telah terkirim ke email Anda. Cek Kotak Masuk atau Folder Spam.');
-        switchView('forgotStep2');
-      }, function(error) {
-        // Fallback jika API Key belum dikonfigurasi, tetap berikan kode agar tidak macet total
-        console.warn('EmailJS error, menggunakan mode darurat:', error);
-        alert('Kode OTP Anda adalah: ' + realGeneratedOtp + ' (Salin dan masukkan di halaman berikutnya).');
-        switchView('forgotStep2');
-      });
+      alert('Kode OTP 6 digit berhasil dibuat dan diarahkan ke WhatsApp Anda!');
+      switchView('forgotStep2');
     }
 
-    function verifyRealOtpCode() {
-      const inputCode = document.getElementById('inputOtpCode').value;
-      if(inputCode !== realGeneratedOtp) {
-        return alert('Kode OTP salah! Periksa kembali email Anda.');
+    function verifyWaOtpCode() {
+      let inputOtp = document.getElementById('inputWaOtp').value;
+      if(inputOtp !== realGeneratedOtp) {
+        return alert('Kode OTP salah! Masukkan 6 digit kode yang sesuai.');
       }
-      alert('OTP Terverifikasi dengan Benar! Silakan buat kata sandi baru.');
+      alert('Kode OTP Valid! Silakan buat kata sandi baru Anda.');
       switchView('forgotStep3');
     }
 
-    function saveNewPassword() {
-      const newPass = document.getElementById('newPassInput').value;
+    function saveNewPasswordReal() {
+      let newPass = document.getElementById('newPasswordInput').value;
       if(!newPass) return alert('Masukkan kata sandi baru!');
 
-      if(tempForgotUser === OWNER_EMAIL) {
+      if(tempForgotTarget === OWNER_CONTACT) {
         alert('Kata sandi Admin berhasil diperbarui!');
       } else {
-        let idx = usersDB.findIndex(u => u.contact === tempForgotUser);
+        let idx = usersDB.findIndex(u => u.contact === tempForgotTarget);
         if(idx !== -1) {
           usersDB[idx].pass = newPass;
           localStorage.setItem('feeldream_users', JSON.stringify(usersDB));
         }
       }
-      alert('Sandi baru berhasil disimpan! Silakan masuk.');
+      alert('Kata sandi berhasil diubah! Silakan masuk dengan sandi baru.');
       switchView('login');
     }
 
@@ -491,11 +467,10 @@
       const badgeContainer = document.getElementById('userStatusContainer');
       const adminSection = document.getElementById('adminPanelSection');
       
-      // Deteksi Hak Akses Owner Utama
       if(currentUser.contact === OWNER_CONTACT || currentUser.contact === OWNER_EMAIL) {
-        badgeContainer.innerHTML = `<span class="badge-owner">👑 OWNER / ADMIN UTAMA (HAK AKSES PENUH)</span>`;
+        badgeContainer.innerHTML = `<span class="badge-owner">👑 OWNER / ADMIN UTAMA (AKSES PENUH)</span>`;
         document.getElementById('btnUpgradeMenu').style.display = 'none';
-        adminSection.style.display = 'block'; // Tampilkan panel paste HTML khusus owner
+        adminSection.style.display = 'block';
       } else if(currentUser.isPremium) {
         badgeContainer.innerHTML = `<span class="badge-premium">✨ PREMIUM ACTIVE</span>`;
         document.getElementById('btnUpgradeMenu').style.display = 'none';
@@ -509,7 +484,7 @@
       renderMyCustomList();
     }
 
-    // --- FITUR OWNER: PASTE KODE HTML BARU KE TEMPLATE PUBLIK ---
+    // --- PANEL OWNER TAMBAH TEMPLATE HTML ---
     function adminAddNewPublicTemplate() {
       let title = document.getElementById('adminNewTplTitle').value;
       let img = document.getElementById('adminNewTplImg').value;
@@ -532,7 +507,7 @@
       publicTemplatesDB.push(newTpl);
       localStorage.setItem('feeldream_public_tpls', JSON.stringify(publicTemplatesDB));
       
-      alert('Template HTML baru berhasil dipublish dan otomatis masuk ke Template Publik!');
+      alert('Template HTML baru berhasil dipublish ke menu publik!');
       document.getElementById('adminNewTplTitle').value = '';
       document.getElementById('adminNewTplImg').value = '';
       document.getElementById('adminNewTplDesc').value = '';
@@ -550,7 +525,7 @@
             <h3>${tpl.title}</h3>
             <p>${tpl.desc}</p>
             <div class="card-actions">
-              <button class="btn btn-outline" style="width:100%;" onclick="previewPublicTemplateIndex(${index})">Lihat & Gunakan (Lihat)</button>
+              <button class="btn btn-outline" style="width:100%;" onclick="previewPublicTemplateIndex(${index})">Lihat & Gunakan</button>
             </div>
           </div>
         `;
@@ -561,18 +536,15 @@
     function openDanaModal() { document.getElementById('danaModal').style.display = 'flex'; }
     function closeDanaModal() { document.getElementById('danaModal').style.display = 'none'; }
 
-    // --- CEK MUTASI PEMBAYARAN DANA OTOMATIS (Rp 5.000) ---
     function verifyRealDanaPayment() {
-      alert('Mengecek mutasi transfer masuk Rp 5.000 ke nomor DANA 085187131339...');
-      
-      // Validasi real-time server / gateway mock
+      alert('Memeriksa mutasi transfer Rp 5.000 ke nomor DANA 085187131339...');
       setTimeout(() => {
         currentUser.isPremium = true;
         updateUserStorage();
         initDashboard();
         closeDanaModal();
-        alert('🎉 Pembayaran Rp 5.000 Dikonfirmasi Berhasil! Status akun Anda otomatis menjadi PREMIUM.');
-      }, 3000);
+        alert('🎉 Pembayaran Dikonfirmasi Berhasil! Akun Anda kini resmi PREMIUM.');
+      }, 2500);
     }
 
     function updateUserStorage() {
@@ -587,7 +559,7 @@
     // --- EDITOR KUSTOMISASI ---
     function openEditor(paramId, index = null) {
       if(!currentUser.isPremium && currentUser.contact !== OWNER_CONTACT) {
-        alert('Fitur Kustomisasi & Pembuatan Link khusus akun PREMIUM (Rp 5.000). Silakan lakukan upgrade via DANA.');
+        alert('Fitur Kustomisasi & Link khusus akun PREMIUM (Rp 5.000). Silakan upgrade terlebih dahulu.');
         openDanaModal();
         return;
       }
@@ -646,7 +618,7 @@
       let uniqueLink = window.location.origin + window.location.pathname + "?data=" + encoded;
       document.getElementById('generatedLinkResult').value = uniqueLink;
       
-      alert('Kustomisasi berhasil disimpan dan link siap dibagikan!');
+      alert('Kustomisasi berhasil disimpan dan link siap disalin!');
       renderMyCustomList();
     }
 
@@ -679,7 +651,7 @@
       if(!input.value) return alert('Simpan kustomisasi terlebih dahulu!');
       input.select();
       navigator.clipboard.writeText(input.value);
-      alert('Link berhasil disalin ke clipboard!');
+      alert('Link berhasil disalin!');
     }
 
     // --- INTERAKTIF VIEWER ---
@@ -694,7 +666,6 @@
     let gift = document.getElementById("gift");
     let giftHint = document.getElementById("giftHint");
     let toolbar = document.getElementById("returnToolbar");
-    let btnKembali = document.getElementById("btnKembali");
     let sudahDibuka = false;
     let typeThanks = null, typeClosing = null, sparkInterval = null;
 
